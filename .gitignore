@@ -201,3 +201,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Docker
+data
+
+# Postgres db
+server/db

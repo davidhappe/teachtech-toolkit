@@ -1,0 +1,40 @@
+# modified from: https://github.com/akshat2602/django-nextjs-boilerplate/blob/master/docker-compose.dev.yml
+
+services:
+  server:
+    platform: linux/x86_64
+    container_name: server
+    build: ./server
+    working_dir: /src
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./server:/src
+    env_file:
+      - .env.dev
+    command: >
+      python manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - db
+
+  client:
+    container_name: client
+    build: ./client
+    working_dir: /src
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/src
+    env_file:
+      - .env.dev
+    depends_on:
+      - server
+      - db
+
+  db:
+    container_name: db
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    env_file:
+      - .env.dev

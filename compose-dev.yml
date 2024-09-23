@@ -13,7 +13,7 @@ services:
     env_file:
       - .env.dev
     command: >
-      python manage.py runserver 0.0.0.0:8000
+      sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     depends_on:
       - db
 
@@ -25,6 +25,8 @@ services:
       - "3000:3000"
     volumes:
       - ./client:/src
+      - /src/node_modules
+      - /src/.next
     env_file:
       - .env.dev
     depends_on:

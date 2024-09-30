@@ -12,7 +12,7 @@ export default function TestCaseForm({ addTestCase }) {
   // handling adding the new test case
   const handleAddTestCase = () => {
     const newTestCase = {
-      type, // function or unit
+      type, // functional or unit test
       method: type === "unit" ? method : null, // method name is only required for unit tests
       input, // test case input
       output, // expected output

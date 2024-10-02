@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import TestCaseForm from "@/components/TestCaseForm"; // form for defining test cases
 import SubmissionStatus from "@/components/SubmissionStatus"; // component to show success/error message after submitting tests 
+import '@/styles/autograder.css';
 
 export default function Autograder() {
   const [language, setLanguage] = useState("Java"); 
@@ -14,9 +15,18 @@ export default function Autograder() {
     setTestCases([...testCases, newTestCase]);
   };
 
+  // function for removing a test case
+  const removeTestCase = (indexToRemove) => {
+    setTestCases(testCases.filter((_, index) => index !== indexToRemove));
+  };
+
   // submission handler for the assignment form
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    // make sure there's at least one test case
+    if (testCases.length === 0) {
+      alert("Please add at least one test case before submitting.");
+      return;
+    }
 
     const autograderData = {
       language,
@@ -52,39 +62,49 @@ export default function Autograder() {
 
       }
     } catch (error) {
-      setSubmissionStatus("error");
-      console.error("Network error:", error);
+        setSubmissionStatus("error");
+        console.error("Network error:", error);
     }
   };
 
   return (
-    <div>
+    <div className="autograder-container">
       <h1>Create Autograder</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Language:
-          <select value={language} onChange={(e) => setLanguage(e.target.value)}>
-            <option value="Java">Java</option>
-            <option value="Python">Python</option>
-          </select>
-        </label>
+      <div className="form-group">
+        <label>Language</label>
+        <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+          <option value="Java">Java</option>
+          <option value="Python">Python</option>
+        </select>
+      </div>
 
-        <h2>Test Cases</h2>
-        {testCases.map((testCase, index) => (
-          <div key={index}>
-            <p>
-              Test {index + 1} - {testCase.type} Test
-            </p>
-            <p>Input: {testCase.input}</p>
-            <p>Expected Output: {testCase.output}</p>
-            <p>Points: {testCase.points}</p>
-          </div>
-        ))}
+      <h2>Test Cases</h2>
+      {testCases.length === 0 ? (
+        <p className="no-test-cases">No test cases added yet.</p>
+      ) : (
+        <div className="test-cases">
+          {testCases.map((testCase, index) => (
+            <div key={index} className="test-case">
+              <div>
+                <p>{`Test ${index + 1} - ${testCase.type} Test`}</p>
+                <p>Input: {testCase.input}</p>
+                <p>Expected Output: {testCase.output}</p>
+                <p>Points: {testCase.points}</p>
+              </div>
+              <button type="button" className="remove-button" onClick={() => removeTestCase(index)}>
+                X
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
 
-        <TestCaseForm addTestCase={addTestCase} />
+      <TestCaseForm addTestCase={addTestCase} />
 
-        <button type="submit">Create Autograder</button>
-      </form>
+      <button type="submit" className="submit-button" onClick={handleSubmit}>
+        Create Autograder
+      </button>
+
       <SubmissionStatus status={submissionStatus} message={message} />
     </div>
   );

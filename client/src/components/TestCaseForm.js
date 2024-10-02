@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import '@/styles/testCaseForm.css';
 
 // This component handles the input for adding test cases
 export default function TestCaseForm({ addTestCase }) {
@@ -10,7 +11,14 @@ export default function TestCaseForm({ addTestCase }) {
   const [points, setPoints] = useState(0);
 
   // handling adding the new test case
-  const handleAddTestCase = () => {
+  const handleAddTestCase = (e) => {
+    e.preventDefault();
+
+    if (!input || !output || !points || (type === "unit" && !method)) { // make sure all fields are filled in
+      alert("Please fill out all required fields.");
+      return;
+    }
+
     const newTestCase = {
       type, // functional or unit test
       method: type === "unit" ? method : null, // method name is only required for unit tests
@@ -29,7 +37,7 @@ export default function TestCaseForm({ addTestCase }) {
   };
 
   return (
-    <div>
+    <form onSubmit={handleAddTestCase}>
       <label>
         Test Type:
         <select value={type} onChange={(e) => setType(e.target.value)}>
@@ -55,7 +63,6 @@ export default function TestCaseForm({ addTestCase }) {
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          //required
         />
       </label>
 
@@ -64,7 +71,6 @@ export default function TestCaseForm({ addTestCase }) {
         <textarea
           value={output}
           onChange={(e) => setOutput(e.target.value)}
-          //required
         />
       </label>
 
@@ -74,13 +80,12 @@ export default function TestCaseForm({ addTestCase }) {
           type="number"
           value={points}
           onChange={(e) => setPoints(parseInt(e.target.value))}
-          //required
         />
       </label>
 
       <button type="button" onClick={handleAddTestCase}>
         Add Test Case
       </button>
-    </div>
+    </form>
   );
 }

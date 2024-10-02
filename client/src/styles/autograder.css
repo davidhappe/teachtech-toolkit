@@ -55,17 +55,20 @@
   }
   
   .remove-button {
-    background-color: red;
-    color: white;
+    height: 1.5em;
+    width: 1.5em;
+    background-color: #f9f9f9;
+    color: rgb(73, 73, 73);
     border: none;
-    padding: 8px;
+    padding: 0px;
     cursor: pointer;
-    border-radius: 4px;
-    font-size: 14px;
+    border-radius: 20px;
+    font-size: 18px;
   }
   
   .remove-button:hover {
-    background-color: darkred;
+    background-color: #cfc9c9;
+    color: rgb(73, 73, 73);
   }
   
   .submit-button {

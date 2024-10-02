@@ -92,7 +92,7 @@ export default function Autograder() {
                 <p>Points: {testCase.points}</p>
               </div>
               <button type="button" className="remove-button" onClick={() => removeTestCase(index)}>
-                X
+                &times;
               </button>
             </div>
           ))}

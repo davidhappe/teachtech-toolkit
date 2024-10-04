@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build --build-arg FILE=java/soln.java --progress=plain .
+docker build --build-arg FILE=java/incorrect2.java --progress=plain .

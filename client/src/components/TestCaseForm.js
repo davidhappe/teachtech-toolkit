@@ -3,41 +3,58 @@ import React, { useState } from "react";
 import '@/styles/testCaseForm.css';
 
 // This component handles the input for adding test cases
-export default function TestCaseForm({ addTestCase }) {
+export default function TestCaseForm({ addTestCase, useDiffTesting }) {
   const [type, setType] = useState("functional");
   const [method, setMethod] = useState("");
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
-  const [points, setPoints] = useState(0);
+  const [weight, setWeight] = useState(0);
+  const [name, setName] = useState("");
+  const [testVisibility, setTestVisibility] = useState("visible");
 
   // handling adding the new test case
   const handleAddTestCase = (e) => {
     e.preventDefault();
 
-    if (!input || !output || !points || (type === "unit" && !method)) { // make sure all fields are filled in
+    if (!input || (!useDiffTesting && !output) || !weight || (type === "unit" && !method) || !name) { // make sure all fields are filled in
       alert("Please fill out all required fields.");
       return;
     }
 
     const newTestCase = {
+      name, // name for the test case
       type, // functional or unit test
       method: type === "unit" ? method : null, // method name is only required for unit tests
       input, // test case input
-      output, // expected output
-      points: parseInt(points, 10), // converting points to an int
+      output, // test case expected output
+      weight: parseInt(weight, 10), // converting points to an int
+      visibility: testVisibility, // test result visibility to student on gradescope 
     };
 
     addTestCase(newTestCase); // sends the new test case to the parent component (Autograder)
 
     // resetting form fields after adding test case
+    setName("");
     setInput("");
     setOutput("");
-    setPoints(0);
+    setWeight(0);
     setMethod("");
+    setTestVisibility("visible");
   };
 
   return (
     <form onSubmit={handleAddTestCase}>
+      <label>
+        Test Name:
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Test case name"
+          required
+        />
+      </label>
+
       <label>
         Test Type:
         <select value={type} onChange={(e) => setType(e.target.value)}>
@@ -66,21 +83,33 @@ export default function TestCaseForm({ addTestCase }) {
         />
       </label>
 
+      {!useDiffTesting && (
+        <label>
+          Expected Output:
+          <textarea
+            value={output}
+            onChange={(e) => setOutput(e.target.value)}
+          />
+        </label>
+      )}
+
       <label>
-        Expected Output:
-        <textarea
-          value={output}
-          onChange={(e) => setOutput(e.target.value)}
+        Weight:
+        <input
+          type="number"
+          value={weight}
+          onChange={(e) => setWeight(parseInt(e.target.value))}
         />
       </label>
 
       <label>
-        Points:
-        <input
-          type="number"
-          value={points}
-          onChange={(e) => setPoints(parseInt(e.target.value))}
-        />
+        Visibility:
+        <select value={testVisibility} onChange={(e) => setTestVisibility(e.target.value)}>
+          <option value="visible">Visible to students</option>
+          <option value="after_due_date">Visible after due date</option>
+          <option value="hidden">Hidden</option>
+          <option value="after_published">Visible after published</option>
+        </select>
       </label>
 
       <button type="button" onClick={handleAddTestCase}>

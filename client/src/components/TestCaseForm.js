@@ -7,7 +7,9 @@ export default function TestCaseForm({ addTestCase, useDiffTesting }) {
   const [type, setType] = useState("functional");
   const [method, setMethod] = useState("");
   const [input, setInput] = useState("");
+  const [inputType, setInputType] = useState("string");
   const [output, setOutput] = useState("");
+  const [outputType, setOutputType] = useState("string");
   const [weight, setWeight] = useState(0);
   const [name, setName] = useState("");
   const [testVisibility, setTestVisibility] = useState("visible");
@@ -26,7 +28,9 @@ export default function TestCaseForm({ addTestCase, useDiffTesting }) {
       type, // functional or unit test
       method: type === "unit" ? method : null, // method name is only required for unit tests
       input, // test case input
+      inputType, // input data type
       output, // test case expected output
+      outputType, // expected output data type
       weight: parseInt(weight, 10), // converting points to an int
       visibility: testVisibility, // test result visibility to student on gradescope 
     };
@@ -36,7 +40,9 @@ export default function TestCaseForm({ addTestCase, useDiffTesting }) {
     // resetting form fields after adding test case
     setName("");
     setInput("");
+    
     setOutput("");
+    setOutputType("string");
     setWeight(0);
     setMethod("");
     setTestVisibility("visible");
@@ -70,7 +76,7 @@ export default function TestCaseForm({ addTestCase, useDiffTesting }) {
             type="text"
             value={method}
             onChange={(e) => setMethod(e.target.value)}
-            placeholder="e.g., isEven()"
+            placeholder="Method name without parenthesis, e.g., isEven for the method IsEven()"
           />
         </label>
       )}
@@ -83,14 +89,34 @@ export default function TestCaseForm({ addTestCase, useDiffTesting }) {
         />
       </label>
 
+      <label>
+        Input Type:
+        <select value={inputType} onChange={(e) => setInputType(e.target.value)}>
+          <option value="string">String</option>
+          <option value="int">Integer</option>
+          <option value="bool">Boolean</option>
+        </select>
+      </label>
+
       {!useDiffTesting && (
-        <label>
-          Expected Output:
-          <textarea
-            value={output}
-            onChange={(e) => setOutput(e.target.value)}
-          />
-        </label>
+        <>
+          <label>
+            Expected Output:
+            <textarea
+              value={output}
+              onChange={(e) => setOutput(e.target.value)}
+            />
+          </label>
+
+          <label>
+            Output Type:
+            <select value={outputType} onChange={(e) => setOutputType(e.target.value)}>
+              <option value="string">String</option>
+              <option value="int">Integer</option>
+              <option value="bool">Boolean</option>
+            </select>
+          </label>
+        </>
       )}
 
       <label>

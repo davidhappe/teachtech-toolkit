@@ -10,6 +10,7 @@ services:
       - "8000:8000"
     volumes:
       - ./server:/src
+      - ./tmp:/tmp  # To map the /tmp directory in the container to the ./tmp directory on host (to test generating the tests.py file for now)
     env_file:
       - .env.dev
     command: >

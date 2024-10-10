@@ -124,7 +124,9 @@ export default function Autograder() {
                 <p><strong>Type:</strong> {testCase.type}</p>
                 {testCase.type === "unit" && ( <p><strong>Method:</strong> {testCase.method}</p> )}
                 <p><strong>Input:</strong> {testCase.input}</p>
+                <p><strong>Input Type:</strong> {testCase.inputType}</p>
                 {!useDiffTesting && ( <p><strong>Expected Output:</strong> {testCase.output}</p> )}
+                {!useDiffTesting && ( <p><strong>Expected Output Type:</strong> {testCase.outputType}</p> )}
                 <p><strong>Weight:</strong> {testCase.weight}</p>
                 <p><strong>Visibility:</strong> {testCase.visibility}</p>
               </div>

@@ -11,7 +11,7 @@ export default function Autograder() {
   const [testCases, setTestCases] = useState([]);
   const [submissionStatus, setSubmissionStatus] = useState(null);
   const [message, setMessage] = useState("");
-  //const [skeletonCode, setSkeletonCode] = useState(null); // For the optional skeleton code file
+  // const [skeletonCode, setSkeletonCode] = useState(null); // For the optional skeleton code file
 
   // function to add a new test case
   const addTestCase = (newTestCase) => {
@@ -31,13 +31,7 @@ export default function Autograder() {
       return;
     }
 
-    /*const autograderData = {
-      language,
-      solutionFile,
-      testCases,
-    };*/
-
-    const formData = new FormData(); // using formData to be able to pass files
+    const formData = new FormData();
 
     formData.append("language", language);
     formData.append("useDiffTesting", useDiffTesting);
@@ -48,30 +42,23 @@ export default function Autograder() {
 
     formData.append("testCases", JSON.stringify(testCases));
 
-    //console.log('Autograder Data:', autograderData);
-
     // sending data to the backend
     try {
-      const response = await fetch("http://localhost:8000/api/autograder/", { // POST request to the django backend with the autograder data
+      const response = await fetch("http://localhost:8000/api/autograder/", { 
         method: "POST",
         body: formData,
       });
 
-      // if django backend returns success
       if (response.ok) {
         console.log("Autograder created successfully");
         const data = await response.json();
         setSubmissionStatus("success");
         setMessage(data.message);
-
-        // set zip file/download link eventually?
-
       } else {
         console.error("Error creating autograder");
         const errorData = await response.json();
         setSubmissionStatus("error");
         setMessage(errorData.message || "Submission failed");
-
       }
     } catch (error) {
         setSubmissionStatus("error");
@@ -81,68 +68,86 @@ export default function Autograder() {
 
   return (
     <div className="autograder-container">
-      <h1>Create Autograder</h1>
-      <div className="form-group">
-        <label>Language</label>
-        <select value={language} onChange={(e) => setLanguage(e.target.value)}>
-          <option value="Java">Java</option>
-          <option value="Python">Python</option>
-        </select>
-      </div>
-
-      <div className="form-group checkbox-group">
-        <label>
-          Use Diff Testing?
-          <input
-            type="checkbox"
-            checked={useDiffTesting}
-            onChange={(e) => setUseDiffTesting(e.target.checked)}
-          />
-        </label>
-      </div>
-
-      {useDiffTesting && (
-        <div className="form-group">
-          <label>Upload Solution File</label>
-          <input
-            type="file"
-            onChange={(e) => setSolutionFile(e.target.files[0])}
-          />
+      <h1>Create Gradescope Autograder</h1>
+      <div className="header">
+        <div className="form-group inline-group">
+          <label>Language</label>
+          <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+            <option value="Java">Java</option>
+            <option value="Python">Python</option>
+          </select>
         </div>
-      )}
 
-      <h2>Test Cases</h2>
-      {testCases.length === 0 ? (
-        <p className="no-test-cases">No test cases added yet.</p>
-      ) : (
-        <div className="test-cases">
-          {testCases.map((testCase, index) => (
-            <div key={index} className="test-case">
-              <div>
-                <p><strong>{`Test ${index + 1}: `}</strong></p>
-                <p><strong>Name:</strong> {testCase.name}</p>
-                <p><strong>Type:</strong> {testCase.type}</p>
-                {testCase.type === "unit" && ( <p><strong>Method:</strong> {testCase.method}</p> )}
-                <p><strong>Input:</strong> {testCase.input}</p>
-                <p><strong>Input Type:</strong> {testCase.inputType}</p>
-                {!useDiffTesting && ( <p><strong>Expected Output:</strong> {testCase.output}</p> )}
-                {!useDiffTesting && ( <p><strong>Expected Output Type:</strong> {testCase.outputType}</p> )}
-                <p><strong>Weight:</strong> {testCase.weight}</p>
-                <p><strong>Visibility:</strong> {testCase.visibility}</p>
-              </div>
-              <button type="button" className="remove-button" onClick={() => removeTestCase(index)}>
-                &times;
-              </button>
+        <div className="form-group checkbox-group">
+          <label>
+            Use Diff Testing?
+            <input
+              type="checkbox"
+              checked={useDiffTesting}
+              onChange={(e) => setUseDiffTesting(e.target.checked)}
+            />
+          </label>
+        </div>
+
+        {useDiffTesting && (
+          <div className="form-group">
+            <label>Upload Solution File</label>
+            <input
+              type="file"
+              onChange={(e) => setSolutionFile(e.target.files[0])}
+            />
+          </div>
+        )}
+
+        <button type="submit" className="submit-button" onClick={handleSubmit}>
+          Create Autograder
+        </button>
+      </div>
+
+      <div className="main-content">
+        <div className="form-container">
+          <TestCaseForm addTestCase={addTestCase} useDiffTesting={useDiffTesting} />
+        </div>
+
+        <div className="test-cases-container">
+          <h2>Test Cases</h2>
+          {testCases.length === 0 ? (
+            <p className="no-test-cases">No test cases added yet.</p>
+          ) : (
+            <div className="test-cases">
+              {testCases.map((testCase, index) => (
+                <div key={index} className="test-case">
+                  <button type="button" className="remove-button" onClick={() => removeTestCase(index)}>
+                    &times;
+                  </button>
+                  <div>
+                    <p><strong>{`Test ${index + 1}:`}</strong></p>
+                    <p><strong>Name:</strong> {testCase.name}</p>
+                    <p><strong>Type:</strong> {testCase.type}</p>
+                    {testCase.type === "unit" && (
+                      <p><strong>Method:</strong> {testCase.method}</p>
+                    )}
+                    {testCase.inputs.map((input, i) => (
+                      <div key={i}>
+                        <p><strong>Input {i + 1}:</strong> {input.value}</p>
+                        <p><strong>Input {i + 1} Type:</strong> {input.type}</p>
+                      </div>
+                    ))}
+                    {testCase.output && (
+                      <div>
+                        <p><strong>Expected Output:</strong> {testCase.output.value}</p>
+                        <p><strong>Expected Output Type:</strong> {testCase.output.type}</p>
+                      </div>
+                    )}
+                    <p><strong>Weight:</strong> {testCase.weight}</p>
+                    <p><strong>Visibility:</strong> {testCase.visibility}</p>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
-      )}
-
-      <TestCaseForm addTestCase={addTestCase} useDiffTesting={useDiffTesting} />
-
-      <button type="submit" className="submit-button" onClick={handleSubmit}>
-        Create Autograder
-      </button>
+      </div>
 
       <SubmissionStatus status={submissionStatus} message={message} />
     </div>

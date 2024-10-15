@@ -2,10 +2,8 @@
   display: flex;
   flex-direction: column;
   font-family: Arial, sans-serif;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
   height: 100vh;
+  margin: 0 auto;
 }
 
 h1 {
@@ -19,7 +17,13 @@ h1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
+  padding: 15px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ccc;
+}
+
+.form-group.inline-group label, select {
+  margin: 0;
 }
 
 .inline-group, .checkbox-group {
@@ -28,25 +32,41 @@ h1 {
   gap: 10px;
 }
 
+.checkbox-group span {
+  white-space: nowrap;
+}
+
+#diff-checkbox {
+  margin: 0;
+}
+
+#file-upload-button {
+  min-width: 100px;
+  max-width: 300px;
+  margin-left: 10px;
+  margin-bottom: 0px;
+}
+
 .main-content {
   display: flex;
   flex: 1;
 }
 
-.form-container, .test-cases-container {
-  flex: 1;
-  overflow-y: auto;
-  height: calc(100vh - 120px);
-  padding: 15px;
-}
-
 .form-container {
+  flex: 0 0 300px;
+  overflow-y: auto;
+  padding: 15px;
+  background-color: #f7f7f7;
   border-right: 1px solid #ddd;
+  min-width: 400px;
 }
 
 .test-cases-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 15px;
+  background-color: #f0f0f0;
   border-left: 1px solid #ddd;
-  background: #f9f9f9;
 }
 
 .submit-button {

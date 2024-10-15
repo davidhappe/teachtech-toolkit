@@ -31,7 +31,7 @@ export default function Autograder() {
       return;
     }
 
-    const formData = new FormData();
+    const formData = new FormData(); // using formData to be able to pass files
 
     formData.append("language", language);
     formData.append("useDiffTesting", useDiffTesting);
@@ -44,7 +44,7 @@ export default function Autograder() {
 
     // sending data to the backend
     try {
-      const response = await fetch("http://localhost:8000/api/autograder/", { 
+      const response = await fetch("http://localhost:8000/api/autograder/", {  // POST request to the django backend with the autograder data
         method: "POST",
         body: formData,
       });
@@ -79,21 +79,23 @@ export default function Autograder() {
         </div>
 
         <div className="form-group checkbox-group">
-          <label>
-            Use Diff Testing?
+          
+          <span>Use Diff Testing?</span>
             <input
               type="checkbox"
+              id="diff-checkbox"
               checked={useDiffTesting}
               onChange={(e) => setUseDiffTesting(e.target.checked)}
             />
-          </label>
+          
         </div>
 
         {useDiffTesting && (
           <div className="form-group">
-            <label>Upload Solution File</label>
+            <span>Upload Solution File</span>
             <input
               type="file"
+              id="file-upload-button"
               onChange={(e) => setSolutionFile(e.target.files[0])}
             />
           </div>
@@ -117,7 +119,7 @@ export default function Autograder() {
             <div className="test-cases">
               {testCases.map((testCase, index) => (
                 <div key={index} className="test-case">
-                  <button type="button" className="remove-button" onClick={() => removeTestCase(index)}>
+                  <button type="button" className="remove-button  small-remove-button" onClick={() => removeTestCase(index)}>
                     &times;
                   </button>
                   <div>
@@ -129,14 +131,14 @@ export default function Autograder() {
                     )}
                     {testCase.inputs.map((input, i) => (
                       <div key={i}>
-                        <p><strong>Input {i + 1}:</strong> {input.value}</p>
                         <p><strong>Input {i + 1} Type:</strong> {input.type}</p>
+                        <p><strong>Input {i + 1}:</strong> {input.value}</p>
                       </div>
                     ))}
                     {testCase.output && (
                       <div>
-                        <p><strong>Expected Output:</strong> {testCase.output.value}</p>
                         <p><strong>Expected Output Type:</strong> {testCase.output.type}</p>
+                        <p><strong>Expected Output:</strong> {testCase.output.value}</p>
                       </div>
                     )}
                     <p><strong>Weight:</strong> {testCase.weight}</p>

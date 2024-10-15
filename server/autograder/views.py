@@ -31,7 +31,7 @@ def create_autograder(request):
             for chunk in solution_file.chunks():
                 f.write(chunk)
 
-    # Generate tests.py
+    # Generate tests.py, this will generate and store tests.py in '/tmp'
     tests_file_path = write_tests_file(test_cases, use_diff_testing, solution_file)
 
     return Response({"message": "Autograder received successfully!"})

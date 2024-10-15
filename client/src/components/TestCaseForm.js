@@ -89,7 +89,7 @@ export default function TestCaseForm({ addTestCase, useDiffTesting }) {
             type="text"
             value={method}
             onChange={(e) => setMethod(e.target.value)}
-            placeholder="Method name without parentheses, e.g., isEven for the method isEven()"
+            placeholder="Without parentheses, e.g., isEven for isEven()"
           />
         </label>
       )}
@@ -98,11 +98,6 @@ export default function TestCaseForm({ addTestCase, useDiffTesting }) {
         <label>Inputs:</label>
         {inputs.map((input, index) => (
           <div key={index} className="input-group">
-            <textarea
-              value={input.value}
-              onChange={(e) => handleInputChange(index, "value", e.target.value)}
-              placeholder="Enter input"
-            />
             <select
               value={input.type}
               onChange={(e) => handleInputChange(index, "type", e.target.value)}
@@ -113,20 +108,20 @@ export default function TestCaseForm({ addTestCase, useDiffTesting }) {
               <option value="array">Array</option>
               <option value="object">Object</option>
             </select>
-            <button type="button" onClick={() => handleRemoveInput(index)}>&times;</button>
+            <textarea
+              value={input.value}
+              onChange={(e) => handleInputChange(index, "value", e.target.value)}
+              placeholder="Enter input"
+            />
+            <button type="button" className="remove-button small-remove-button" onClick={() => handleRemoveInput(index)}>&times;</button>
           </div>
         ))}
-        <button type="button" onClick={handleAddInput}>Add an Input</button>
+        <button type="button" className="add-input-button" onClick={handleAddInput}>+ Add an Input</button>
       </div>
 
       {!useDiffTesting && (
         <div>
           <label>Expected Output:</label>
-          <textarea
-            value={output.value}
-            onChange={(e) => setOutput({ ...output, value: e.target.value })}
-            placeholder="Expected output"
-          />
           <select
             value={output.type}
             onChange={(e) => setOutput({ ...output, type: e.target.value })}
@@ -137,6 +132,11 @@ export default function TestCaseForm({ addTestCase, useDiffTesting }) {
             <option value="array">Array</option>
             <option value="object">Object</option>
           </select>
+          <textarea
+            value={output.value}
+            onChange={(e) => setOutput({ ...output, value: e.target.value })}
+            placeholder="Expected output"
+          />
         </div>
       )}
 
@@ -159,7 +159,7 @@ export default function TestCaseForm({ addTestCase, useDiffTesting }) {
         </select>
       </label>
 
-      <button type="button" onClick={handleAddTestCase}>Add Test Case</button>
+      <button type="button" id="create-test-button" onClick={handleAddTestCase}>Add Test Case</button>
     </form>
   );
 }

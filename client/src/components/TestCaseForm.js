@@ -113,7 +113,7 @@ export default function TestCaseForm({ addTestCase, useDiffTesting }) {
               onChange={(e) => handleInputChange(index, "value", e.target.value)}
               placeholder="Enter input"
             />
-            <button type="button" className="remove-button small-remove-button" onClick={() => handleRemoveInput(index)}>&times;</button>
+            <button type="button" className="remove-button-small" onClick={() => handleRemoveInput(index)}>&times;</button>
           </div>
         ))}
         <button type="button" className="add-input-button" onClick={handleAddInput}>+ Add an Input</button>
@@ -159,7 +159,9 @@ export default function TestCaseForm({ addTestCase, useDiffTesting }) {
         </select>
       </label>
 
-      <button type="button" id="create-test-button" onClick={handleAddTestCase}>Add Test Case</button>
+      <div className="create-test-button-container">
+        <button type="button" id="create-test-button" onClick={handleAddTestCase}>Add Test Case</button>
+      </div>
     </form>
   );
 }

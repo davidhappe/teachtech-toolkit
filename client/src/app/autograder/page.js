@@ -70,40 +70,42 @@ export default function Autograder() {
     <div className="autograder-container">
       <h1>Create Gradescope Autograder</h1>
       <div className="header">
-        <div className="form-group inline-group">
-          <label>Language</label>
-          <select value={language} onChange={(e) => setLanguage(e.target.value)}>
-            <option value="Java">Java</option>
-            <option value="Python">Python</option>
-          </select>
-        </div>
-
-        <div className="form-group checkbox-group">
-          
-          <span>Use Diff Testing?</span>
-            <input
-              type="checkbox"
-              id="diff-checkbox"
-              checked={useDiffTesting}
-              onChange={(e) => setUseDiffTesting(e.target.checked)}
-            />
-          
-        </div>
-
-        {useDiffTesting && (
-          <div className="form-group">
-            <span>Upload Solution File</span>
-            <input
-              type="file"
-              id="file-upload-button"
-              onChange={(e) => setSolutionFile(e.target.files[0])}
-            />
+        <div className="header-left">
+          <div className="form-group inline-group">
+            <label>Language</label>
+            <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+              <option value="Java">Java</option>
+              <option value="Python">Python</option>
+            </select>
           </div>
-        )}
 
-        <button type="submit" className="submit-button" onClick={handleSubmit}>
-          Create Autograder
-        </button>
+          <div className="form-group checkbox-group">
+            
+            <span>Use Diff Testing?</span>
+              <input
+                type="checkbox"
+                id="diff-checkbox"
+                checked={useDiffTesting}
+                onChange={(e) => setUseDiffTesting(e.target.checked)}
+              />
+            
+          </div>
+
+          {useDiffTesting && (
+            <div className="form-group">
+              <span>Upload Solution File</span>
+              <input
+                type="file"
+                id="file-upload-button"
+                onChange={(e) => setSolutionFile(e.target.files[0])}
+              />
+            </div>
+          )}
+
+          <button type="submit" className="submit-button" onClick={handleSubmit}>
+            Create Autograder
+          </button>
+        </div>
       </div>
 
       <div className="main-content">

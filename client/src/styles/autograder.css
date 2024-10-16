@@ -9,21 +9,29 @@
 h1 {
   font-size: 28px;
   text-align: center;
+  margin-top: 20px;
   margin-bottom: 20px;
   width: 100%;
 }
 
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 15px;
+  padding: 5px 15px 5px 15px;
   background-color: #ffffff;
   border-bottom: 1px solid #ccc;
 }
 
+.header-left {
+  display: flex;
+  gap: 20px;
+  flex-grow: 1;
+  align-items: center;
+}
+
 .form-group.inline-group label, select {
   margin: 0;
+  padding: 6px 10px;
 }
 
 .inline-group, .checkbox-group {
@@ -45,6 +53,7 @@ h1 {
   max-width: 300px;
   margin-left: 10px;
   margin-bottom: 0px;
+  padding: 2px 2px;
 }
 
 .main-content {
@@ -53,12 +62,11 @@ h1 {
 }
 
 .form-container {
-  flex: 0 0 300px;
+  flex: 0 0 500px;
   overflow-y: auto;
   padding: 15px;
   background-color: #f7f7f7;
   border-right: 1px solid #ddd;
-  min-width: 400px;
 }
 
 .test-cases-container {
@@ -69,10 +77,17 @@ h1 {
   border-left: 1px solid #ddd;
 }
 
+.test-cases-container h2{
+  text-align: center;
+  padding-bottom: 10px;
+  font-weight: bold;
+}
+
 .submit-button {
+  margin-left: auto;
   background-color: #007bff;
   color: white;
-  padding: 12px 20px;
+  padding: 6px 10px;
   border: none;
   border-radius: 5px;
   font-size: 16px;

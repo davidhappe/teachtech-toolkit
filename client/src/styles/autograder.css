@@ -86,7 +86,7 @@ h1 {
 
 .submit-button {
   margin-left: auto;
-  background-color: #007bff;
+  background-color: #138d75;
   color: white;
   padding: 6px 10px;
   border: none;
@@ -96,7 +96,7 @@ h1 {
 }
 
 .submit-button:hover {
-  background-color: #0056b3;
+  background-color: #117e68;
 }
 
 .test-cases {

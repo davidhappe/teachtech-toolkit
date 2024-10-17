@@ -25,7 +25,7 @@ export default function Layout({ children }) {
         <header className="navbar">
           <div className="navbar-content">
             <Link href="/" className="logo-link">
-              <img src="/path/to/logo.png" alt="Logo" className="logo" />
+              <img src="/images/custom-logo.png" alt="Logo" className="logo" />
             </Link>
             <Link href="/autograder" className="navbar-link">Gradescope Autograder</Link>
           </div>

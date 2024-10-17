@@ -18,7 +18,7 @@ textarea {
 }
   
 #create-test-button {
-  background-color: #28a745;
+  background-color: #34495e;
   color: white;
   padding: 6px 10px;
   border: none;
@@ -27,7 +27,7 @@ textarea {
 }
   
 #create-test-button:hover {
-    background-color: #218838;
+    background-color: #2a3b4d;
 }
 
 .input-group {

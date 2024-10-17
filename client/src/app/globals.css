@@ -28,7 +28,7 @@ body {
 }
 
 .logo {
-  width: 50px;
+  width: 200px;
   height: auto;
 }
 
@@ -38,11 +38,12 @@ body {
 
 .navbar-link {
   font-size: 18px;
-  color: #8b8b8b;
+  color: #34495e;
   text-decoration: none;
 }
 
 .navbar-link:hover {
   color: #5c5c5c;
 }
+
 

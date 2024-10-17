@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# TODO: actually do stuff here!
+
+python3 -u source/autograder.py 

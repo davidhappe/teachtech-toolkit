@@ -3,7 +3,7 @@ import traceback
 from gradescope_utils.autograder_utils.decorators import weight, visibility, number, partial_credit
 {% if case.imports is not None %}
 {% for import in case.imports %}
-import
+import {{ import }}
 {% endfor %}
 {% endif %}
 
@@ -32,7 +32,7 @@ class {{ case.name }}(unittest.TestCase):
     @visibility({{ test.visibility }})
     {% endif %}
 
-    def test(self):
+    def test{{ loop.index }}(self):
         '''
             {{ test.comment }}
         '''

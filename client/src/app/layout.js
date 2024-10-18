@@ -1,17 +1,7 @@
 import Link from 'next/link';
 import localFont from "next/font/local";
+import Head from 'next/head';
 import './globals.css';
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
 
 export const metadata = {
   title: "TeachTech Toolkit",
@@ -21,13 +11,16 @@ export const metadata = {
 export default function Layout({ children }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <Head>
+        <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+      </Head>
+      <body>
         <header className="navbar">
           <div className="navbar-content">
             <Link href="/" className="logo-link">
               <img src="/images/custom-logo.png" alt="Logo" className="logo" />
             </Link>
-            <Link href="/autograder" className="navbar-link">Gradescope Autograder</Link>
+            <Link href="/autograder" className="navbar-link" id="gradescope-link">Gradescope Autograder</Link>
           </div>
         </header>
         <div>

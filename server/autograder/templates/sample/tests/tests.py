@@ -23,15 +23,12 @@ class {{ case.name }}(unittest.TestCase):
     {% if test.weight is not None %}
     @weight({{ test.weight }})
     {% endif %}
-
     {% if test.number is not None %}
     @number({{ test.number }})
     {% endif %}
-
     {% if test.visibility is not None %}
     @visibility({{ test.visibility }})
     {% endif %}
-
     def test{{ loop.index }}(self):
         '''
             {{ test.comment }}

@@ -5,6 +5,15 @@ import subprocess
 
 class pretest(unittest.TestCase):
 
+    {% if test.weight is not None %}
+    @weight({{ test.weight }})
+    {% endif %}
+    {% if test.number is not None %}
+    @number({{ test.number }})
+    {% endif %}
+    {% if test.visibility is not None %}
+    @visibility({{ test.visibility }})
+    {% endif %}
     def file_check(self):
         """
             Files present
@@ -12,7 +21,16 @@ class pretest(unittest.TestCase):
         paths = [{{ files|join(', ') }}]
         missing = check_submitted_files(paths,base='/')
         self.assertListEqual(missing,[],"Missing following files: {}".format(', '.join(missing)))
-    
+
+    {% if test.weight is not None %}
+    @weight({{ test.weight }})
+    {% endif %}
+    {% if test.number is not None %}
+    @number({{ test.number }})
+    {% endif %}
+    {% if test.visibility is not None %}
+    @visibility({{ test.visibility }})
+    {% endif %}    
     def compilation_check(self):
         """
             Compilation check

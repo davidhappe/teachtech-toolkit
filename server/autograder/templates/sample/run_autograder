@@ -1,5 +1,37 @@
 #!/usr/bin/env bash
 
-# TODO: actually do stuff here!
+mkdir autograde
+
+# copy autograder harness and testfiles
+cp source/autograder.py autograde/autograder.py
+cp -r source/tests autograde/tests
+
+# copy instructor files
+{% if source.files is not None %}
+{% for file in source.files %}
+cp source/{{ file }} autograde/{{ file }} 2>&1
+{% endfor %}
+{% endif %}
+
+# copy instructor folders
+{% if source.folders is not None %}
+{% for folder in source.folders %}
+cp -r source/{{ folder }} autograde/{{ folder }} 2>&1
+{% endfor %}
+{% endif %}
+
+#copy student files
+{% if submission.files is not None %}
+{% for file in submission.files %}
+cp submission/{{ file }} autograde/{{ file }} 2>&1
+{% endfor %}
+{% endif %}
+
+# copy student folders
+{% if submission.folders is not None %}
+{% for folder in submission.folders %}
+cp -r source/{{ folder }} autograde/{{ folder }} 2>&1
+{% endfor %}
+{% endif %}
 
 python3 -u source/autograder.py 

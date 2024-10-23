@@ -1,8 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import '@/styles/testCaseForm.css';
 
-export default function TestCaseForm({ addTestCase, useDiffTesting }) {
+export default function TestCaseForm({ addTestCase, updateTestCase, useDiffTesting, editingTestCase, editingIndex, closeForm, }) {
   const [type, setType] = useState("unit");
   const [method, setMethod] = useState("");
   const [inputs, setInputs] = useState([]);
@@ -10,6 +10,18 @@ export default function TestCaseForm({ addTestCase, useDiffTesting }) {
   const [weight, setWeight] = useState(0);
   const [name, setName] = useState("");
   const [testVisibility, setTestVisibility] = useState("visible");
+
+  useEffect(() => {
+    if (editingTestCase) {
+      setType(editingTestCase.type || "unit");
+      setMethod(editingTestCase.method || "");
+      setInputs(editingTestCase.inputs || []);
+      setOutput(editingTestCase.output || { value: "", type: "string" });
+      setWeight(editingTestCase.weight || 0);
+      setName(editingTestCase.name || "");
+      setTestVisibility(editingTestCase.visibility || "visible");
+    }
+  }, [editingTestCase]);
 
   // Handling addition and removal of input fields
   const handleAddInput = () => {
@@ -26,14 +38,14 @@ export default function TestCaseForm({ addTestCase, useDiffTesting }) {
     setInputs(newInputs);
   };
 
-  const handleAddTestCase = (e) => {
+  const handleSaveTestCase = (e) => {
     e.preventDefault();
 
     if (
       inputs.some((input) => !input.value) ||
       (!useDiffTesting && !output.value) ||
-      !weight || 
-      (type === "unit" && !method) || 
+      !weight ||
+      (type === "unit" && !method) ||
       !name
     ) {
       alert("Please fill out all required fields.");
@@ -50,19 +62,19 @@ export default function TestCaseForm({ addTestCase, useDiffTesting }) {
       visibility: testVisibility,
     };
 
-    addTestCase(newTestCase);
+    if (editingIndex !== null) {
+      // Editing existing test case
+      updateTestCase(editingIndex, newTestCase);
+    } else {
+      // Adding new test case
+      addTestCase(newTestCase);
+    }
 
-    // Resetting form fields
-    setName("");
-    setMethod("");
-    setInputs([]);
-    setOutput({ value: "", type: "string" });
-    setWeight(0);
-    setTestVisibility("visible");
+    closeForm(); // Close form after saving
   };
 
   return (
-    <form onSubmit={handleAddTestCase}>
+    <form onSubmit={handleSaveTestCase} className="test-case-form">
       <label>
         Test Name:
         <input
@@ -83,15 +95,15 @@ export default function TestCaseForm({ addTestCase, useDiffTesting }) {
       </label>
 
       {type === "unit" && (
-        <label>
-          Method to Test:
-          <input
-            type="text"
-            value={method}
-            onChange={(e) => setMethod(e.target.value)}
-            placeholder="Without parentheses, e.g., isEven for isEven()"
-          />
-        </label>
+          <label>
+            Method to Test:
+            <input
+              type="text"
+              value={method}
+              onChange={(e) => setMethod(e.target.value)}
+              placeholder="Without parentheses, e.g., isEven for isEven()"
+            />
+          </label>
       )}
 
       <div>
@@ -117,7 +129,7 @@ export default function TestCaseForm({ addTestCase, useDiffTesting }) {
           </div>
         ))}
         <button type="button" className="add-input-button" onClick={handleAddInput}>+ Add an Input</button>
-      </div>
+        </div>
 
       {!useDiffTesting && (
         <div>
@@ -159,8 +171,13 @@ export default function TestCaseForm({ addTestCase, useDiffTesting }) {
         </select>
       </label>
 
-      <div className="create-test-button-container">
-        <button type="button" id="create-test-button" onClick={handleAddTestCase}>Add Test Case</button>
+      <div className="button-group">
+        <button type="button" className="cancel-button" onClick={closeForm}>
+          Cancel
+        </button>
+        <button type="submit" className="create-test-button">
+          {editingTestCase ? "Save Changes" : "Add Test Case"}
+        </button>
       </div>
     </form>
   );

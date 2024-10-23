@@ -5,26 +5,46 @@ import SubmissionStatus from "@/components/SubmissionStatus"; // component to sh
 import '@/styles/autograder.css';
 
 export default function Autograder() {
-  const [language, setLanguage] = useState("Java"); 
+  const [language, setLanguage] = useState("Java");
   const [useDiffTesting, setUseDiffTesting] = useState(false); // Toggle for diff testing
   const [solutionFile, setSolutionFile] = useState(null); // Solution file for diff testing
   const [testCases, setTestCases] = useState([]);
   const [submissionStatus, setSubmissionStatus] = useState(null);
   const [message, setMessage] = useState("");
-  // const [skeletonCode, setSkeletonCode] = useState(null); // For the optional skeleton code file
-
+  const [showForm, setShowForm] = useState(false);
+  const [editingTestCase, setEditingTestCase] = useState(null); // For editing
+  const [editingIndex, setEditingIndex] = useState(null); // Track index of the test case being edited
+  
   // function to add a new test case
   const addTestCase = (newTestCase) => {
     setTestCases([...testCases, newTestCase]);
   };
 
+  const updateTestCase = (index, updatedTestCase) => {
+    const updatedCases = [...testCases];
+    updatedCases[index] = updatedTestCase;
+    setTestCases(updatedCases);
+  };
+
   // function for removing a test case
-  const removeTestCase = (indexToRemove) => {
-    setTestCases(testCases.filter((_, index) => index !== indexToRemove));
+  const handleRemoveTestCase = (index) => {
+    setTestCases(testCases.filter((_, i) => i !== index));
+  };
+
+  const openForm = (testCase = null, index = null) => {
+    setEditingTestCase(testCase);
+    setEditingIndex(index);
+    setShowForm(true);
+  };
+
+  const closeForm = () => {
+    setShowForm(false);
+    setEditingTestCase(null);
+    setEditingIndex(null);
   };
 
   // submission handler for the assignment form
-  const handleSubmit = async (e) => {
+  const handleSubmit = async () => {
     // make sure there's at least one test case
     if (testCases.length === 0) {
       alert("Please add at least one test case before submitting.");
@@ -32,10 +52,10 @@ export default function Autograder() {
     }
 
     const formData = new FormData(); // using formData to be able to pass files
-
+    
     formData.append("language", language);
     formData.append("useDiffTesting", useDiffTesting);
-
+    
     if (useDiffTesting && solutionFile) {
       formData.append("solutionFile", solutionFile);
     }
@@ -68,7 +88,7 @@ export default function Autograder() {
 
   return (
     <div className="autograder-container">
-      <h1>Create Gradescope Autograder</h1>
+      <h1>Gradescope Autograder Creator</h1>
       <div className="header">
         <div className="header-left">
           <div className="form-group inline-group">
@@ -80,15 +100,15 @@ export default function Autograder() {
           </div>
 
           <div className="form-group checkbox-group">
-            
+
             <span>Use Diff Testing?</span>
-              <input
-                type="checkbox"
-                id="diff-checkbox"
-                checked={useDiffTesting}
-                onChange={(e) => setUseDiffTesting(e.target.checked)}
-              />
-            
+            <input
+              type="checkbox"
+              id="diff-checkbox"
+              checked={useDiffTesting}
+              onChange={(e) => setUseDiffTesting(e.target.checked)}
+            />
+
           </div>
 
           {useDiffTesting && (
@@ -109,10 +129,6 @@ export default function Autograder() {
       </div>
 
       <div className="main-content">
-        <div className="form-container">
-          <TestCaseForm addTestCase={addTestCase} useDiffTesting={useDiffTesting} />
-        </div>
-
         <div className="test-cases-container">
           <h2>Test Cases</h2>
           {testCases.length === 0 ? (
@@ -121,7 +137,7 @@ export default function Autograder() {
             <div className="test-cases">
               {testCases.map((testCase, index) => (
                 <div key={index} className="test-case">
-                  <button type="button" className="remove-button  small-remove-button" onClick={() => removeTestCase(index)}>
+                  <button type="button" className="remove-button small-remove-button" onClick={() => handleRemoveTestCase(index)}>
                     &times;
                   </button>
                   <div>
@@ -137,23 +153,39 @@ export default function Autograder() {
                         <p><strong>Input {i + 1}:</strong> {input.value}</p>
                       </div>
                     ))}
-                    {testCase.output && (
-                      <div>
-                        <p><strong>Expected Output Type:</strong> {testCase.output.type}</p>
-                        <p><strong>Expected Output:</strong> {testCase.output.value}</p>
-                      </div>
-                    )}
                     <p><strong>Weight:</strong> {testCase.weight}</p>
                     <p><strong>Visibility:</strong> {testCase.visibility}</p>
+                    <button
+                      type="button"
+                      onClick={() => openForm(testCase, index)}
+                      className="edit-button"
+                    >
+                      Edit
+                    </button>
                   </div>
                 </div>
               ))}
             </div>
           )}
+          <button className="add-button" onClick={() => openForm(null)}>+ Add Test Case</button>
         </div>
       </div>
+
+      {showForm && (
+        <div className="form-modal">
+          <TestCaseForm
+            addTestCase={addTestCase}
+            updateTestCase={updateTestCase} // Pass down update logic
+            useDiffTesting={useDiffTesting}
+            editingTestCase={editingTestCase}
+            editingIndex={editingIndex} // Pass down index for editing
+            closeForm={closeForm}
+          />
+        </div>
+      )}
 
       <SubmissionStatus status={submissionStatus} message={message} />
     </div>
   );
 }
+

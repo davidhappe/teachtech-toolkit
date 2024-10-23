@@ -36,6 +36,11 @@ body {
 
 .logo-link {
   text-decoration: none;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.logo-link:hover {
+  transform: scale(1.02); 
 }
 
 .navbar-link {
@@ -43,10 +48,11 @@ body {
   color: #34495e;
   text-decoration: none;
   font-family: 'Work Sans', sans-serif;
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .navbar-link:hover {
-  color: #5c5c5c;
+  transform: scale(1.02); 
 }
 
 #gradescope-link {

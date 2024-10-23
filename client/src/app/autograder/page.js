@@ -137,31 +137,30 @@ export default function Autograder() {
             <div className="test-cases">
               {testCases.map((testCase, index) => (
                 <div key={index} className="test-case">
-                  <button type="button" className="remove-button small-remove-button" onClick={() => handleRemoveTestCase(index)}>
-                    &times;
-                  </button>
-                  <div>
-                    <p><strong>{`Test ${index + 1}:`}</strong></p>
-                    <p><strong>Name:</strong> {testCase.name}</p>
-                    <p><strong>Type:</strong> {testCase.type}</p>
-                    {testCase.type === "unit" && (
-                      <p><strong>Method:</strong> {testCase.method}</p>
-                    )}
-                    {testCase.inputs.map((input, i) => (
-                      <div key={i}>
-                        <p><strong>Input {i + 1} Type:</strong> {input.type}</p>
-                        <p><strong>Input {i + 1}:</strong> {input.value}</p>
-                      </div>
-                    ))}
-                    <p><strong>Weight:</strong> {testCase.weight}</p>
-                    <p><strong>Visibility:</strong> {testCase.visibility}</p>
-                    <button
-                      type="button"
-                      onClick={() => openForm(testCase, index)}
-                      className="edit-button"
-                    >
-                      Edit
-                    </button>
+                  <div className="test-case-header">
+                    <p className="test-case-title">{`Test ${index + 1}: ${testCase.name}`}</p>
+                    <button type="button" className="remove-button small-remove-button" onClick={() => handleRemoveTestCase(index)}>&times;</button>
+                  </div>
+                  <div className="test-case-content">
+                    <div>
+                      <p><strong>Weight:</strong> {testCase.weight}</p>
+                      <p><strong>Visibility:</strong> {testCase.visibility}</p>
+                    </div>
+                    <div>
+                      <p><strong>Type of test:</strong> {testCase.type}</p>
+                      {testCase.type === "unit" && <p><strong>Method being tested:</strong> {testCase.method}</p>}
+                    </div>
+                    <div>
+                      {testCase.inputs.map((input, i) => (
+                        <p key={i}><strong>Input {i + 1}:</strong> {input.value} ({input.type})</p>
+                      ))}
+                    </div>
+                    <div>
+                      <p><strong>Expected Output:</strong> {testCase.output.value} ({testCase.output.type})</p>
+                    </div>
+                    <div>
+                      <button type="button" onClick={() => openForm(testCase, index)} className="edit-button">Edit</button>
+                    </div>
                   </div>
                 </div>
               ))}

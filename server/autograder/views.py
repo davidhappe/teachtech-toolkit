@@ -66,20 +66,24 @@ def write_tests_file(test_cases, use_diff_testing, solution_file=None):
 
             # Convert inputs and expected output to the correct format
             input_args = []
-            for inp in inputs:
-                if inp['type'] == 'string':
-                    input_args.append(f'"{inp["value"]}"')
-                elif inp['type'] == 'bool':
-                    input_args.append('True' if inp["value"].lower() == 'true' else 'False')
-                elif inp['type'] == 'int':
-                    input_args.append(str(inp['value']))
+            if inputs:
+                for inp in inputs:
+                    if inp['type'] == 'string':
+                        input_args.append(f'"{inp["value"]}"')
+                    elif inp['type'] == 'bool':
+                        input_args.append('True' if inp["value"].lower() == 'true' else 'False')
+                    elif inp['type'] == 'int':
+                        input_args.append(str(inp['value']))
 
-            if output['type'] == 'string':
-                expected_output_str = f'"{output["value"]}"'
-            elif output['type'] == 'bool':
-                expected_output_str = 'True' if output["value"].lower() == 'true' else 'False'
-            elif output['type'] == 'int':
-                expected_output_str = str(output["value"])
+            if output:
+                if output['type'] == 'string':
+                    expected_output_str = f'"{output["value"]}"'
+                elif output['type'] == 'bool':
+                    expected_output_str = 'True' if output["value"].lower() == 'true' else 'False'
+                elif output['type'] == 'int':
+                    expected_output_str = str(output["value"])
+            else: 
+                expected_output_str = None
 
             # Convert input arguments list to comma-separated string
             input_args_str = ', '.join(input_args)

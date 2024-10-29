@@ -88,7 +88,10 @@ export default function Autograder() {
 
   return (
     <div className="autograder-container">
-      <h1>Gradescope Autograder Creator</h1>
+      <div className="title">
+        <img src="/images/gs.png" className="title-img"/>
+        <h1>Gradescope Autograder Creator</h1>
+      </div>
       <div className="header">
         <div className="header-left">
           <div className="form-group inline-group">
@@ -149,15 +152,20 @@ export default function Autograder() {
                     <div>
                       <p><strong>Type of test:</strong> {testCase.type}</p>
                       {testCase.type === "unit" && <p><strong>Method being tested:</strong> {testCase.method}</p>}
+                      {testCase.type === "style" && <p><strong>Style Check Type:</strong> {testCase.styleCheck === "whitespace" ? "Unnecessary Whitespace" : "Check Comments Exist"}</p>}
                     </div>
-                    <div>
-                      {testCase.inputs.map((input, i) => (
-                        <p key={i}><strong>Input {i + 1}:</strong> {input.value} ({input.type})</p>
-                      ))}
-                    </div>
-                    <div>
-                      <p><strong>Expected Output:</strong> {testCase.output.value} ({testCase.output.type})</p>
-                    </div>
+                    {testCase.type !== "style" && (
+                      <div>
+                        <div>
+                          {testCase.inputs.map((input, i) => (
+                            <p key={i}><strong>Input {i + 1}:</strong> {input.value} ({input.type})</p>
+                          ))}
+                        </div>
+                        <div>
+                          <p><strong>Expected Output:</strong> {testCase.output.value} ({testCase.output.type})</p>
+                        </div>
+                      </div>
+                    )}
                     <div>
                       <button type="button" onClick={() => openForm(testCase, index)} className="edit-button">Edit</button>
                     </div>

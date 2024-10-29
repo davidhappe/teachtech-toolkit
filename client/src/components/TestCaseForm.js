@@ -10,6 +10,7 @@ export default function TestCaseForm({ addTestCase, updateTestCase, useDiffTesti
   const [weight, setWeight] = useState(0);
   const [name, setName] = useState("");
   const [testVisibility, setTestVisibility] = useState("visible");
+  const [styleCheck, setStyleCheck] = useState("whitespace");
 
   useEffect(() => {
     if (editingTestCase) {
@@ -20,6 +21,7 @@ export default function TestCaseForm({ addTestCase, updateTestCase, useDiffTesti
       setWeight(editingTestCase.weight || 0);
       setName(editingTestCase.name || "");
       setTestVisibility(editingTestCase.visibility || "visible");
+      setStyleCheck(editingTestCase.styleCheck || "whitespace");
     }
   }, [editingTestCase]);
 
@@ -43,10 +45,11 @@ export default function TestCaseForm({ addTestCase, updateTestCase, useDiffTesti
 
     if (
       inputs.some((input) => !input.value) ||
-      (!useDiffTesting && !output.value) ||
+      (!useDiffTesting && type !== "style" && !output.value) || 
       !weight ||
       (type === "unit" && !method) ||
-      !name
+      !name ||
+      (type === "style" && !styleCheck)
     ) {
       alert("Please fill out all required fields.");
       return;
@@ -56,10 +59,11 @@ export default function TestCaseForm({ addTestCase, updateTestCase, useDiffTesti
       name,
       type,
       method: type === "unit" ? method : null,
-      inputs,
-      output: useDiffTesting ? null : output,
+      inputs: type === "style" ? null : inputs,
+      output: useDiffTesting || type === "style" ? null : output,
       weight: parseInt(weight, 10),
       visibility: testVisibility,
+      styleCheck: type === "style" ? styleCheck : null,
     };
 
     if (editingIndex !== null) {
@@ -91,6 +95,7 @@ export default function TestCaseForm({ addTestCase, updateTestCase, useDiffTesti
         <select value={type} onChange={(e) => setType(e.target.value)}>
           <option value="unit">Unit Test</option>
           <option value="functional">Functional Test</option>
+          <option value="style">Style Test</option>
         </select>
       </label>
 
@@ -106,6 +111,7 @@ export default function TestCaseForm({ addTestCase, updateTestCase, useDiffTesti
           </label>
       )}
 
+      {type !== "style" && (
       <div>
         <label>Inputs:</label>
         {inputs.map((input, index) => (
@@ -130,8 +136,9 @@ export default function TestCaseForm({ addTestCase, updateTestCase, useDiffTesti
         ))}
         <button type="button" className="add-input-button" onClick={handleAddInput}>+ Add an Input</button>
         </div>
+      )}
 
-      {!useDiffTesting && (
+      {!useDiffTesting && type !== "style" && (
         <div>
           <label>Expected Output:</label>
           <select
@@ -150,6 +157,16 @@ export default function TestCaseForm({ addTestCase, updateTestCase, useDiffTesti
             placeholder="Expected output"
           />
         </div>
+      )}
+
+      {type === "style" && (
+        <label>
+          Style Check Type:
+          <select value={styleCheck} onChange={(e) => setStyleCheck(e.target.value)}>
+            <option value="whitespace">Unnecessary Whitespace</option>
+            <option value="comments">Check Comments Exist</option>
+          </select>
+        </label>
       )}
 
       <label>

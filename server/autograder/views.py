@@ -4,6 +4,27 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 import json
 import os
+from django.template.loader import render_to_string
+import zipfile as zip
+
+# use templating to autograde
+def generate_autograder(test_cases, files):
+    with zip.ZipFile('autograder.zip', 'w') as autograder:
+
+        # copy over static files
+        autograder.write('requirements.txt')
+        autograder.write('setup.sh')
+        autograder.write('autograder.py')
+
+        # generate run_autograder
+        autograder.writestr('run_autograder', render_to_string('run_autograder', test_cases))
+
+        # add test cases
+        autograder.mkdir('tests')
+        autograder.writestr('tests/pretest.py', render_to_string('pretest.py', test_cases))
+        
+
+    pass
 
 # view for creating an autograder, handles the POST request from frontend
 @api_view(['POST'])

@@ -45,7 +45,7 @@ export default function TestCaseForm({ addTestCase, updateTestCase, useDiffTesti
 
     if (
       inputs.some((input) => !input.value) ||
-      (!useDiffTesting && type !== "style" && !output.value) || 
+      (!useDiffTesting && type !== "style" && type !== "compilation" && !output.value) || 
       !weight ||
       (type === "unit" && !method) ||
       !name ||
@@ -59,8 +59,8 @@ export default function TestCaseForm({ addTestCase, updateTestCase, useDiffTesti
       name,
       type,
       method: type === "unit" ? method : null,
-      inputs: type === "style" ? null : inputs,
-      output: useDiffTesting || type === "style" ? null : output,
+      inputs: type === "style" || type === "compilation" ? null : inputs,
+      output: useDiffTesting || type === "style" || type === "compilation" ? null : output,
       weight: parseInt(weight, 10),
       visibility: testVisibility,
       styleCheck: type === "style" ? styleCheck : null,
@@ -96,6 +96,7 @@ export default function TestCaseForm({ addTestCase, updateTestCase, useDiffTesti
           <option value="unit">Unit Test</option>
           <option value="functional">Functional Test</option>
           <option value="style">Style Test</option>
+          <option value="compilation">Compilation Test</option>
         </select>
       </label>
 
@@ -111,7 +112,7 @@ export default function TestCaseForm({ addTestCase, updateTestCase, useDiffTesti
           </label>
       )}
 
-      {type !== "style" && (
+      {type !== "style" && type !== "compilation" && (
       <div>
         <label>Inputs:</label>
         {inputs.map((input, index) => (
@@ -138,7 +139,7 @@ export default function TestCaseForm({ addTestCase, updateTestCase, useDiffTesti
         </div>
       )}
 
-      {!useDiffTesting && type !== "style" && (
+      {!useDiffTesting && type !== "style" && type !== "compilation" && (
         <div>
           <label>Expected Output:</label>
           <select

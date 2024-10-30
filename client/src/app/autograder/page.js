@@ -154,7 +154,7 @@ export default function Autograder() {
                       {testCase.type === "unit" && <p><strong>Method being tested:</strong> {testCase.method}</p>}
                       {testCase.type === "style" && <p><strong>Style Check Type:</strong> {testCase.styleCheck === "whitespace" ? "Unnecessary Whitespace" : "Check Comments Exist"}</p>}
                     </div>
-                    {testCase.type !== "style" && (
+                    {testCase.type !== "style" && testCase.type !== "compilation" && (
                       <div>
                         <div>
                           {testCase.inputs.map((input, i) => (

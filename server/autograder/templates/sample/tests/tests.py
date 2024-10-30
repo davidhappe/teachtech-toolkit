@@ -31,7 +31,7 @@ class {{ case.name }}(unittest.TestCase):
     {% endif %}
     def test{{ loop.index }}(self):
         '''
-            {{ test.comment }}
+            {{ test.name }}
         '''
         try:
             # TODO: Make this work with diffcheck input procedure!

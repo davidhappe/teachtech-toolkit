@@ -5,13 +5,13 @@ import subprocess
 
 class pretest(unittest.TestCase):
 
-    {% if test.weight is not None %}
+    {% if test.weight is not none %}
     @weight({{ test.weight }})
     {% endif %}
-    {% if test.number is not None %}
+    {% if test.number is not none %}
     @number({{ test.number }})
     {% endif %}
-    {% if test.visibility is not None %}
+    {% if test.visibility is not none %}
     @visibility({{ test.visibility }})
     {% endif %}
     def file_check(self):
@@ -22,13 +22,13 @@ class pretest(unittest.TestCase):
         missing = check_submitted_files(paths,base='/')
         self.assertListEqual(missing,[],"Missing following files: {}".format(', '.join(missing)))
 
-    {% if test.weight is not None %}
+    {% if test.weight is not none %}
     @weight({{ test.weight }})
     {% endif %}
-    {% if test.number is not None %}
+    {% if test.number is not none %}
     @number({{ test.number }})
     {% endif %}
-    {% if test.visibility is not None %}
+    {% if test.visibility is not none %}
     @visibility({{ test.visibility }})
     {% endif %}    
     def compilation_check(self):
@@ -40,7 +40,7 @@ class pretest(unittest.TestCase):
             proc = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
             out, err = proc.communicate(input=subprocess.PIPE)
             print(out)
-            if err is not None:
+            if err is not none:
                 self.fail(err)
 
         # everything compiled with no errors!    

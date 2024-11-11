@@ -17,6 +17,7 @@ def create_autograder(request):
     test_cases = json.loads(data.get('testCases'))
     use_diff_testing = data.get('useDiffTesting')
     solution_file = files.get('solutionFile')
+    expected_files = json.loads(data.get('expectedFiles'))
 
     # for debugging purposes
     print(f"Received autograder.")
@@ -24,6 +25,7 @@ def create_autograder(request):
     print(f"Test Cases: {test_cases}")
     print(f"Use Diff Testing: {use_diff_testing}")
     print(f"Solution File: {solution_file}")
+    print(f"Expected Files: {expected_files}")
 
     # Save solution file if diff testing
     if use_diff_testing and solution_file:

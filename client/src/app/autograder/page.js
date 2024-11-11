@@ -6,6 +6,9 @@ import '@/styles/autograder.css';
 
 export default function Autograder() {
   const [language, setLanguage] = useState("Java");
+  const [expectedFiles, setExpectedFiles] = useState([]); // Expected student files
+  const [newFileName, setNewFileName] = useState(""); // Input field for adding expected file names
+  const [showExpectedFiles, setShowExpectedFiles] = useState(false); // Toggle for showing the expected files list
   const [useDiffTesting, setUseDiffTesting] = useState(false); // Toggle for diff testing
   const [solutionFile, setSolutionFile] = useState(null); // Solution file for diff testing
   const [testCases, setTestCases] = useState([]);
@@ -14,6 +17,30 @@ export default function Autograder() {
   const [showForm, setShowForm] = useState(false);
   const [editingTestCase, setEditingTestCase] = useState(null); // For editing
   const [editingIndex, setEditingIndex] = useState(null); // Track index of the test case being edited
+
+  // Add expected file to the list
+  const addExpectedFile = () => {
+    if (newFileName.trim() && !expectedFiles.includes(newFileName.trim())) {
+      setExpectedFiles([...expectedFiles, newFileName.trim()]);
+      setNewFileName(""); // Reset input after adding
+    }
+  };
+
+  // Remove a specific file from the list
+  const removeExpectedFile = (fileName) => {
+    setExpectedFiles(expectedFiles.filter(file => file !== fileName));
+  };
+
+  // Toggle the visibility of the expected files pop-out component with animation
+  const toggleExpectedFiles = () => {
+    if (showExpectedFiles) {
+      // Trigger close animation before hiding
+      document.querySelector('.expected-files-popout').classList.add('hidden-popout');
+      setTimeout(() => setShowExpectedFiles(false), 50); // Wait for animation to complete
+    } else {
+      setShowExpectedFiles(true);
+    }
+  };
   
   // function to add a new test case
   const addTestCase = (newTestCase) => {
@@ -51,9 +78,16 @@ export default function Autograder() {
       return;
     }
 
+    // make sure there's at least one expected file
+    if (expectedFiles.length === 0) {
+      alert("Please add at least one expected student file before submitting.");
+      return;
+    }
+
     const formData = new FormData(); // using formData to be able to pass files
     
     formData.append("language", language);
+    formData.append("expectedFiles", JSON.stringify(expectedFiles));
     formData.append("useDiffTesting", useDiffTesting);
     
     if (useDiffTesting && solutionFile) {
@@ -124,11 +158,54 @@ export default function Autograder() {
               />
             </div>
           )}
-
-          <button type="submit" className="submit-button" onClick={handleSubmit}>
-            Create Autograder
-          </button>
         </div>
+
+        <div className="form-group inline-group">
+          <button onClick={toggleExpectedFiles} className="expected-files-button">
+            Expected Student Files  ⇣
+          </button>
+          {showExpectedFiles && (
+            <div className="expected-files-popout">
+              <button className="close-popout-button" onClick={toggleExpectedFiles}>
+                ⇡
+              </button>
+              <h3>Expected Files</h3>
+
+              {expectedFiles.length === 0 ? ( <p>No files added yet.</p> ) : (
+                  <ul>
+                    {expectedFiles.map((file, index) => (
+                      <li key={index} className="expected-file-item">
+                        {file}
+                        <button
+                          type="button"
+                          onClick={() => removeExpectedFile(file)}
+                          className="remove-button-inline"
+                        >
+                          &times;
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+              )}
+
+              <div className="add-file-section">
+                <input
+                  type="text"
+                  value={newFileName}
+                  onChange={(e) => setNewFileName(e.target.value)}
+                  placeholder="Enter file name"
+                />
+                <button onClick={addExpectedFile} className="add-file-button">
+                  Add File
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <button type="submit" className="submit-button" onClick={handleSubmit}>
+          Create Autograder
+        </button>
       </div>
 
       <div className="main-content">

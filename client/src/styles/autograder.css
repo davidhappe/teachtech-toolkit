@@ -115,7 +115,7 @@ h1 {
 }
 
 .submit-button {
-  margin-left: auto;
+  margin-left: 10px;
   background-color: #138d75;
   color: white;
   padding: 6px 10px;
@@ -222,4 +222,149 @@ h1 {
 
 .test-case-content p {
   margin: 5px 0;
+}
+
+.expected-files-button {
+  margin-left: auto;
+  background-color: #34495e;
+  color: white;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.expected-files-button:hover {
+  background-color: #2b3c4d;
+}
+
+.expected-files-popout {
+  position: absolute;
+  top: 118px;
+  right: 175px;
+  width: 250px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  z-index: 100;
+  animation: descend 0.3s ease-out forwards;
+  align-items: center;
+}
+
+@keyframes popOut {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes descend {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hidden-popout {
+  animation: ascend 0.1s ease-out backwards; 
+}
+
+@keyframes ascend {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+}
+
+.expected-files-popout h3 {
+  text-align: center; 
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.expected-files-popout p {
+  text-align: center; 
+  color: #777;
+  font-size: 14px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.close-popout-button {
+  position: absolute;
+  top: 5px;
+  right: 7.5px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+  color: #888;
+  cursor: pointer;
+}
+
+.close-popout-button:hover {
+  color: rgb(0, 0, 0);
+}
+
+.expected-file-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.remove-button-inline {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.remove-button-inline:hover {
+  color: rgb(0, 0, 0);
+}
+
+.add-file-section {
+  display: flex;
+  margin-top: 15px;
+}
+
+.add-file-section input {
+  flex: 1;
+  padding: 5px;
+  margin: 0;
+}
+
+.add-file-button {
+  padding: 5px;
+  margin-left: 5px;
+  cursor: pointer;
+  color: #7a7a7a;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.add-file-button:hover {
+  text-decoration: none;
+  color: #3b3b3b;
 }

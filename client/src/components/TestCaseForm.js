@@ -11,6 +11,7 @@ export default function TestCaseForm({ addTestCase, updateTestCase, useDiffTesti
   const [name, setName] = useState("");
   const [testVisibility, setTestVisibility] = useState("visible");
   const [styleCheck, setStyleCheck] = useState("whitespace");
+  const [compilationCommand, setCompilationCommand] = useState("");
 
   useEffect(() => {
     if (editingTestCase) {
@@ -22,6 +23,7 @@ export default function TestCaseForm({ addTestCase, updateTestCase, useDiffTesti
       setName(editingTestCase.name || "");
       setTestVisibility(editingTestCase.visibility || "visible");
       setStyleCheck(editingTestCase.styleCheck || "whitespace");
+      setCompilationCommand(editingTestCase.compilationCommand || "");
     }
   }, [editingTestCase]);
 
@@ -55,6 +57,11 @@ export default function TestCaseForm({ addTestCase, updateTestCase, useDiffTesti
       return;
     }
 
+    if (type === "compilation" && !compilationCommand.trim()) {
+      alert("Please enter a compilation command for this test case.");
+      return;
+    }
+
     const newTestCase = {
       name,
       type,
@@ -64,6 +71,7 @@ export default function TestCaseForm({ addTestCase, updateTestCase, useDiffTesti
       weight: parseInt(weight, 10),
       visibility: testVisibility,
       styleCheck: type === "style" ? styleCheck : null,
+      compilationCommand: type === "compilation" ? compilationCommand : null,
     };
 
     if (editingIndex !== null) {
@@ -167,6 +175,18 @@ export default function TestCaseForm({ addTestCase, updateTestCase, useDiffTesti
             <option value="whitespace">Unnecessary Whitespace</option>
             <option value="comments">Check Comments Exist</option>
           </select>
+        </label>
+      )}
+
+      {type === "compilation" && (
+        <label>
+          Compilation Command:
+          <input
+            type="text"
+            value={compilationCommand}
+            onChange={(e) => setCompilationCommand(e.target.value)}
+            placeholder="e.g., javac Main.java"
+          />
         </label>
       )}
 

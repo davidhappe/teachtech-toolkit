@@ -1,3 +1,4 @@
+from django.http import FileResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from rest_framework.decorators import api_view, permission_classes
@@ -40,7 +41,7 @@ def create_autograder(request):
     # Generate tests.py, this will generate and store tests.py in '/tmp'
     #tests_file_path = write_tests_file(test_cases, use_diff_testing, solution_file)
 
-    return Response({"message": "Autograder received successfully!"})
+    return FileResponse(open('/tmp/autograder.zip', 'rb'), as_attachment=True, filename='autograder.zip') 
 
 def generate_autograder(test_cases, expected_files):
     

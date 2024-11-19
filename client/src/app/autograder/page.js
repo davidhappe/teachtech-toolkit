@@ -1,7 +1,7 @@
 "use client"; // enabling client side rendering for this component
 import React, { useState } from "react";
 import TestCaseForm from "@/components/TestCaseForm"; // form for defining test cases
-import SubmissionStatus from "@/components/SubmissionStatus"; // component to show success/error message after submitting tests 
+//import SubmissionStatus from "@/components/SubmissionStatus"; // component to show success/error message after submitting tests 
 import '@/styles/autograder.css';
 
 export default function Autograder() {
@@ -12,8 +12,8 @@ export default function Autograder() {
   const [useDiffTesting, setUseDiffTesting] = useState(false); // Toggle for diff testing
   const [solutionFile, setSolutionFile] = useState(null); // Solution file for diff testing
   const [testCases, setTestCases] = useState([]);
-  const [submissionStatus, setSubmissionStatus] = useState(null);
-  const [message, setMessage] = useState("");
+  //const [submissionStatus, setSubmissionStatus] = useState(null);
+  //const [message, setMessage] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editingTestCase, setEditingTestCase] = useState(null); // For editing
   const [editingIndex, setEditingIndex] = useState(null); // Track index of the test case being edited
@@ -104,19 +104,26 @@ export default function Autograder() {
       });
 
       if (response.ok) {
-        console.log("Autograder created successfully");
-        const data = await response.json();
-        setSubmissionStatus("success");
-        setMessage(data.message);
+        const blob = await response.blob(); // Convert response to a blob
+        const url = window.URL.createObjectURL(blob); // Create a URL for the blob
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "autograder.zip"; // Set the download filename
+        document.body.appendChild(a);
+        a.click(); // Programmatically trigger a click to download
+        a.remove(); // Remove the temporary element
+        window.URL.revokeObjectURL(url); // Clean up the URL
+        //setSubmissionStatus("success");
+        //setMessage("Autograder downloaded successfully!");
       } else {
         console.error("Error creating autograder");
         const errorData = await response.json();
-        setSubmissionStatus("error");
-        setMessage(errorData.message || "Submission failed");
+        //setSubmissionStatus("error");
+        //setMessage(errorData.message || "Submission failed");
       }
     } catch (error) {
-        setSubmissionStatus("error");
-        console.error("Network error:", error);
+      //setSubmissionStatus("error");
+      console.error("Network error:", error);
     }
   };
 
@@ -268,7 +275,7 @@ export default function Autograder() {
         </div>
       )}
 
-      <SubmissionStatus status={submissionStatus} message={message} />
+      {/*<SubmissionStatus status={submissionStatus} message={message} />*/}
     </div>
   );
 }

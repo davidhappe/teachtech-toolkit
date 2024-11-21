@@ -1,10 +1,11 @@
-from django.http import FileResponse
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 import json
+import io
 import os
 import zipfile as zip
 
@@ -30,8 +31,6 @@ def create_autograder(request):
     print(f"Solution File: {solution_file}")
     print(f"Expected Files: {expected_files}")
 
-    generate_autograder(test_cases,expected_files)
-
     # Save solution file if diff testing
     #if use_diff_testing and solution_file:
     #    with open('/tmp/solution.java', 'wb') as f:
@@ -39,10 +38,42 @@ def create_autograder(request):
     #            f.write(chunk)
 
     # Generate tests.py, this will generate and store tests.py in '/tmp'
-    #tests_file_path = write_tests_file(test_cases, use_diff_testing, solution_file)
+    # tests_file_path = write_tests_file(test_cases, use_diff_testing, solution_file)
 
-    return FileResponse(open('/tmp/autograder.zip', 'rb'), as_attachment=True, filename='autograder.zip') 
+    pretests = {
+        'compile': [c for c in test_cases if c['type']=='compilation'][0],
+        'submission': { 'files': expected_files},
+    }
+    case = {
+        'tests': [c for c in test_cases if c['type']!='compilation'],
+        'name': 'Test1',
+    }
+    run_autograder = {
+        'submission': { 'files': expected_files, 'folders': None },
+        'source': { 'files': None, 'folders': None}
+    }
 
+    # creates an in memory zip file
+    zip_buffer = io.BytesIO()
+    with zip.ZipFile(zip_buffer, 'w') as autograder:
+        autograder.write('/templates/requirements.txt','requirements.txt')
+        autograder.write('/templates/setup.sh','setup.sh')
+        autograder.write('/templates/autograder.py','autograder.py')
+
+        autograder.writestr('run_autograder', render_to_string('run_autograder', run_autograder))
+
+        autograder.mkdir('tests')
+        autograder.writestr('tests/pretest.py', render_to_string('pretest.py', pretests))
+        autograder.writestr('tests/test1.py', render_to_string('tests.py', case))
+    zip_buffer.seek(0)
+
+    print("Autograder saved to zip file")
+
+    response = HttpResponse(zip_buffer.getvalue(), content_type='application/zip')
+    response['Content-Disposition'] = 'attachment; filename=autograder.zip'
+    return response
+
+'''
 def generate_autograder(test_cases, expected_files):
     
     pretests = {
@@ -69,8 +100,9 @@ def generate_autograder(test_cases, expected_files):
         autograder.writestr('tests/test1.py', render_to_string('tests.py', case))
     
     print("Autograder saved to zip file")
+'''
 
-
+'''
 def write_tests_file(test_cases, use_diff_testing, solution_file=None):
     file_path = '/tmp/tests.py'
 
@@ -159,3 +191,4 @@ def write_tests_file(test_cases, use_diff_testing, solution_file=None):
             f.write('\n')
     
     return file_path
+'''

@@ -1,3 +1,0 @@
-# append required packages w/ newlines
-
-gradescope_utils

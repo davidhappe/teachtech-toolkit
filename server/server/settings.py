@@ -39,13 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'autograder', # registering the autograder app
-    'corsheaders', # for handling cross-origin requests (so frontend can POST to backend)
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -54,21 +51,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# To allow requests from the frontend's port (3000)
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
-
 ROOT_URLCONF = 'server.urls'
 
 TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': ['autograder/templates'],
-        'OPTIONS': {
-            'environment': 'autograder.jinja2.environment'
-        },
-    },
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],

@@ -7,19 +7,21 @@ from gradescope_utils.autograder_utils.json_test_runner import JSONTestRunner
 
 if __name__ == "__main__":
     # do initial test, fail on error
-    suite = unittest.defaultTestLoader.discover('/autograde/tests/pretest*')
+    suite = unittest.defaultTestLoader.discover('autograde/tests', pattern='pretest*.py')
     with StringIO() as io:
-        JSONTestRunner(visibility='visible', stream=io, fastfail=True, failure_prefix="").run(suite)
+        JSONTestRunner(visibility='visible', stream=io, failfast=True, failure_prefix="").run(suite)
+        io.seek(0)
         json_data = load(io)
 
     # check if initial tests are successful
     if bool(json_data['tests']) and all([x == "passed" for x in json_data['tests']]):
         # all good to run
-        suite = unittest.defaultTestLoader.discover('/autograde/tests/test*')
+        suite = unittest.defaultTestLoader.discover('/autograde/tests') #default test pattern
         
         # do final tests
         with StringIO() as io:
             JSONTestRunner(visibility='visible', stream=io).run(suite)
+            io.seek(0)
             test_data = load(io)
         
         # merge test_data with json_data

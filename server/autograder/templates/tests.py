@@ -8,7 +8,7 @@ import {{ import }}
 {% endfor %}
 {% endif %}
 
-class {{ tests.name }}(unittest.TestCase):
+class {{ name }}(unittest.TestCase):
 
     longMessage = False # suppress all error messages but our own
 
@@ -30,7 +30,7 @@ class {{ tests.name }}(unittest.TestCase):
             proc = subprocess.Popen('{{ input.value }}',shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
             out, err = proc.communicate(input=subprocess.PIPE)
             print(out)
-            if err is not none:
+            if err is not None:
                 self.fail(err)
             expected = "{{ test.output.value }}"
             self.assertEqual(str(out), expected, "Expected {}, received {}".format(expected,str(out)))

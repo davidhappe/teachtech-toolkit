@@ -53,6 +53,8 @@ def create_autograder(request):
         'source': { 'files': None, 'folders': None}
     }
 
+    print(case['name'])
+
     # creates an in memory zip file
     zip_buffer = io.BytesIO()
     with zip.ZipFile(zip_buffer, 'w') as autograder:

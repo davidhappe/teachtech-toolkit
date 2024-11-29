@@ -5,12 +5,17 @@ import subprocess
 
 class pretest(unittest.TestCase):
 
+    {#
     {% if submission.weight is not none %}
     @weight({{ submission.weight }})
     {% endif %}
     {% if submission.visibility is not none %}
     @visibility({{ submission.visibility }})
     {% endif %}
+    #}
+    {% if compile.visibility is not none %}
+    @visibility({{ compile.visibility }})
+    {% endif %}    
     def file_check(self):
         """
             Files present
@@ -29,12 +34,12 @@ class pretest(unittest.TestCase):
         """
             Compilation check
         """
-        cmds = [{{ compile.compilationCommand|join(', ')}}]
+        cmds = [{{ compile.compilationCommand}}]
         for cmd in cmds:
             proc = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
             out, err = proc.communicate(input=subprocess.PIPE)
             print(out)
-            if err is not none:
+            if err is not None:
                 self.fail(err)
 
         # everything compiled with no errors!    

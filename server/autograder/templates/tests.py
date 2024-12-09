@@ -8,7 +8,7 @@ import {{ import }}
 {% endfor %}
 {% endif %}
 
-class {{ name }}(unittest.TestCase):
+class {{ name|capitalize }}(unittest.TestCase):
 
     longMessage = False # suppress all error messages but our own
 
@@ -18,7 +18,7 @@ class {{ name }}(unittest.TestCase):
     @weight({{ test.weight }})
     {% endif %}
     {% if test.visibility is not none %}
-    @visibility({{ test.visibility }})
+    @visibility('{{ test.visibility }}')
     {% endif %}
     def test{{ loop.index }}(self):
         '''
@@ -27,13 +27,12 @@ class {{ name }}(unittest.TestCase):
         try:
             # TODO: Make this work with diffcheck input procedure!
             {% for input in test.inputs%}
-            proc = subprocess.Popen('{{ input.value }}',shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-            out, err = proc.communicate(input=subprocess.PIPE)
-            print(out)
-            if err is not None:
+            proc = subprocess.Popen('{{ input.value }}',cwd='autograde/',shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+            out, err = map(lambda s: ''.join(s.decode().splitlines()), proc.communicate(input=subprocess.PIPE))
+            if err != '':
                 self.fail(err)
-            expected = "{{ test.output.value }}"
-            self.assertEqual(str(out), expected, "Expected {}, received {}".format(expected,str(out)))
+            expected = '{{ test.output.value }}'
+            self.assertEqual(out, expected, "Expected \"{}\", received \"{}\"".format(expected,out))
             {% endfor %}
         
         except AssertionError:

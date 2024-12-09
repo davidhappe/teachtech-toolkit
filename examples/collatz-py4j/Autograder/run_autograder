@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+mkdir autograde
+
+cp source/autograder.py autograde/autograder.py
+cp source/tests.py autograde/tests.py
+cp source/Autograder.java autograde/Autograder.java
+
+cp submission/Collatz.java autograde/Collatz.java
+
+javac -cp /usr/local/share/py4j/*:. autograde/Collatz.java autograde/Autograder.java
+java -cp /usr/local/share/py4j/*:. autograde/Autograder.java & sleep 1 && python3 -u autograde/autograder.py

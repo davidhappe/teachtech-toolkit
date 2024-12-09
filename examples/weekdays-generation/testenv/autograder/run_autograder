@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+mkdir autograde
+
+# copy autograder harness and testfiles
+cp source/autograder.py autograde/autograder.py
+cp -r source/tests autograde/tests
+
+# copy instructor files
+
+
+# copy instructor folders
+
+
+#copy student files
+
+
+cp submission/Program.java autograde/Program.java 2>&1
+
+
+
+# copy student folders
+
+
+python3 -u source/autograder.py 
